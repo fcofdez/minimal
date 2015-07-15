@@ -1,0 +1,26 @@
+---
+layout: post
+title:  "Python Garbage Collection"
+date:   2015-07-15 20:33:11
+categories: python internals gc
+---
+
+Python Garbage Collection
+=========================
+
+In this post we'll explore how garbage collection works in two of the Python implementations:
+* [CPython]
+* [PyPy]
+
+Motivation
+----------
+
+testing
+
+{% highlight python %}
+def gc():
+    pass
+{% endhighlight %}
+
+[CPython]: https://github.com/mojombo/jekyll
+[PyPy]:    http://jekyllrb.com
