@@ -16,7 +16,7 @@ Most of the time we're working on business logic using some language, in our
 case Python, using abstractions that Python give us without thinking about the
 layers that are below the programming language abstractions.
 
-![businnes](assets/images/business =250px)
+![businnes](assets/images/business =250x250)
 
 In this blog post we're interested in knowing more about how Python manages the
 life cycle of memory. As far as you know in languages like C/C++, the programmer
