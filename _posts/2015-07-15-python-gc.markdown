@@ -5,8 +5,6 @@ date:   2015-07-15 20:33:11
 categories: python internals gc
 ---
 
-#Python Garbage Collection
-
 In this post we'll explore how garbage collection works in two of the Python implementations:
 
 * [CPython]
@@ -14,12 +12,59 @@ In this post we'll explore how garbage collection works in two of the Python imp
 
 ##Motivation
 
-testing
+Most of the time we're working on business logic using some language, in our
+case Python, using abstractions that Python give us without thinking about the
+layers that are below the programming language abstractions.
 
-{% highlight python %}
-def gc():
-    pass
+![businnes](assets/images/business)
+
+In this blog post we're interested in knowing more about how Python manages the
+life cycle of memory. As far as you know in languages like C/C++, the programmer
+is the one who is in charge of dealing with memory, allocating with the precise
+size and later, after using it, freeing that memory. Since is a manual work,
+memory leaks, a resource that is not freed after using it, are a common problem
+in those languages. There are patterns in C++, [RAII], to solve this problems, as
+well as other techniques like [unique_ptr] [shared_ptr].
+
+Other languages like [Rust] provide a compile time system that prevents memory
+problems using the concept of ownership.
+
+###Dangling pointers
+
+{% highlight c %}
+int * func ( void )
+{
+    int num = 1234;
+    /* ... */
+    return &num ;
+}
 {% endhighlight %}
+
+
+###Ownership
+
+
+{% highlight c %}
+int * func ( void )
+{
+    int * num = malloc (10 * sizeof ( int ));;
+    /* ... */
+    return num ;
+}
+{% endhighlight %}
+
+
+
+We're lucky and Python interpreter does that job for us so we don't have to manage
+memory manually. That's because Python is a garbage collected language.
+
+## Garbage Collection
+
+
 
 [CPython]: https://www.python.org
 [PyPy]:    https://www.pypy.org
+[Rust]:    http://www.rust-lang.org/
+[unique_ptr]:    http://en.cppreference.com/w/cpp/memory/unique_ptr
+[shared_ptrs]:    http://cppreference.com/w/cpp/memory/shared_ptr
+[RAII]:    https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
