@@ -5,29 +5,28 @@ date:   2015-07-15 20:33:11
 categories: python internals gc
 ---
 
-In this post we'll explore how garbage collection works in two of the Python implementations:
+In this post we'll explore how garbage collection works in two of the Python
+implementations:
 
-* [CPython]
-* [PyPy]
+* [CPython] - Reference counting
+* [PyPy] - Incremental min mark
 
 ##Motivation
 
 Most of the time we're working on business logic using some language, in our
-case Python, using abstractions that Python give us without thinking about the
+case Python, using language provided abstractions without thinking about the
 layers that are below the programming language abstractions.
 
 ![businnes](assets/images/business)
 
 In this blog post we're interested in knowing more about how Python manages the
-life cycle of memory. As far as you know in languages like C/C++, the programmer
-is the one who is in charge of dealing with memory, allocating with the precise
-size and later, after using it, freeing that memory. Since is a manual work,
-memory leaks, a resource that is not freed after using it, are a common problem
-in those languages. There are patterns in C++, [RAII], to solve this problems, as
-well as other techniques like [unique_ptr] [shared_ptr].
-
-Other languages like [Rust] provide a compile time system that prevents memory
-problems using the concept of ownership.
+life cycle of memory that are used in our programs. As far as we know in
+languages like C/C++, the programmer is the one in charge of dealing with
+memory, allocating with the precise size and later, after using it, freeing that
+memory. Since is a manual work, memory leaks, a resource that is not freed after
+using it, are a common problem in those languages. There are patterns in C++,
+[RAII], to solve this problems, as well as other techniques like [uniqueptr]
+[sharedptr].
 
 ###Dangling pointers
 
@@ -43,7 +42,6 @@ int * func ( void )
 
 ###Ownership
 
-
 {% highlight c %}
 int * func ( void )
 {
@@ -53,18 +51,24 @@ int * func ( void )
 }
 {% endhighlight %}
 
-
+The trade offs of those languages are clear, but in contrast having the whole
+control over the memory management allow programmers to optimize as much as they
+can.
 
 We're lucky and Python interpreter does that job for us so we don't have to manage
 memory manually. That's because Python is a garbage collected language.
 
-## Garbage Collection
+## What is Garbage Collection?
 
+The first mention to garbage collection was done in 1960 by John McCarthy, the
+creator of LISP, in his paper `Recursive Functions of Symbolic Expressions and
+Their Computation by Machine, Part I` where he describes the formalism around
+the definition of LISP.
 
 
 [CPython]: https://www.python.org
 [PyPy]:    https://www.pypy.org
 [Rust]:    http://www.rust-lang.org/
-[unique_ptr]:    http://en.cppreference.com/w/cpp/memory/unique_ptr
-[shared_ptrs]:    http://cppreference.com/w/cpp/memory/shared_ptr
+[uniqueptr]:    http://en.cppreference.com/w/cpp/memory/unique_ptr
+[sharedptrs]:   http://cppreference.com/w/cpp/memory/shared_ptr
 [RAII]:    https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
