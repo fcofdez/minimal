@@ -11,38 +11,28 @@ implementations:
 * [CPython] - Reference counting
 * [PyPy] - Incremental min mark
 
-##Motivation
+#Motivation
 
 Most of the time we're working on business logic using some language, in our
 case Python, using language provided abstractions without thinking about the
-layers that are below the programming language abstractions.
+layers that are below.
 
-![businnes](assets/images/business)
+![businnes](/assets/images/business)
 
 In this blog post we're interested in knowing more about how Python manages the
-life cycle of memory that are used in our programs. As far as we know in
+life cycle of the memory that are used in our programs. As far as we know in
 languages like C/C++, the programmer is the one in charge of dealing with
 memory, allocating with the precise size and later, after using it, freeing that
-memory. Since is a manual work, memory leaks, a resource that is not freed after
-using it, are a common problem in those languages. There are patterns in C++,
-[RAII], to solve this problems, as well as other techniques like [uniqueptr]
-[sharedptr].
-
-###Dangling pointers
-
-{% highlight c %}
-int * func ( void )
-{
-    int num = 1234;
-    /* ... */
-    return &num ;
-}
-{% endhighlight %}
-
+memory. Since it's a manual work, memory leaks, a resource that is not released
+after using it, are a common problem in those languages. There are patterns in
+C++, [RAII], to solve this problems, as well as other techniques like
+[uniqueptr](http://en.cppreference.com/w/cpp/memory/unique_ptr) and
+[sharedptr](http://en.cppreference.com/w/cpp/memory/shared_ptr), but still it's
+a common problem.
 
 ###Ownership
 
-{% highlight c %}
+{% highlight c linenos %}
 int * func ( void )
 {
     int * num = malloc (10 * sizeof ( int ));;
@@ -51,20 +41,216 @@ int * func ( void )
 }
 {% endhighlight %}
 
-The trade offs of those languages are clear, but in contrast having the whole
-control over the memory management allow programmers to optimize as much as they
-can.
+There can be other problems like dangling pointers, we're allocating memory on the
+[stack] and returning the reference that is invalidated just after the function reach
+the end. So that memory address is invalid so we'll get a SEGFAULT or erroneous data.
+
+###Dangling pointers
+
+{% highlight c linenos %}
+int * func ( void )
+{
+    int num = 1234;
+    /* ... */
+    return &num ;
+} // end of function scope, so num is garbage now.
+{% endhighlight %}
+
+On a high level perspective those languages seems to be very difficult to handle, but
+depending on the problem having the full control of memory is imperative, think about
+an embedded systems environment or a very demanding application like a videogame. 
 
 We're lucky and Python interpreter does that job for us so we don't have to manage
-memory manually. That's because Python is a garbage collected language.
+memory manually. That's because Python has a garbage collector.
 
-## What is Garbage Collection?
+# What is Garbage Collection?
 
 The first mention to garbage collection was done in 1960 by John McCarthy, the
-creator of LISP, in his paper `Recursive Functions of Symbolic Expressions and
-Their Computation by Machine, Part I` where he describes the formalism around
-the definition of LISP.
+creator of LISP, in his paper
+[*Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I*](http://www-formal.stanford.edu/jmc/recursive.pdf)
+where he describes the formalism aroud LISP, and as a side note he defines the
+term *We already called this process “garbage collection”, but I guess I
+chickened out of using it in the paper—or else the Research Laboratory of
+Electronics grammar ladies wouldn’t let me.*
+Funny, right? academia and industry ended up using *garbage collection* as
+the formal term.
 
+Academics define **Garbage collection** as:
+
+>  Garbage collection is automatic memory management. While the mutator runs , it
+>  routinely allocates memory from the heap. If more memory than available is
+>  needed, the collector reclaims unused memory and returns it to the heap.
+
+And there are other terms that we need to define as well.
+
+**Mutator**:
+
+> The part of a running program which executes application code.
+
+Basically our running program.
+
+**Heap**
+
+> A data structure in which objects may be allocated or deallocated in any order.
+
+
+**Collector**
+
+> The part of a running program responsible of garbage collection.
+
+There is a lot of research around garbage collection, one good resource if
+you're interested in going deeper is
+[The Garbage Collection Handbook](http://gchandbook.org/).
+
+I would like to stress that there are some trade-offs when we're running a
+garbage collected language, we can summarize those trade-offs as:
+
+* Additional resources consumption.
+* Performance impacts.
+* Unpredictability on when the GC is performed (depending on the algorithm).
+
+
+Once we know the basics we can start studying how all this works in Python.
+
+# CPython Implementation - Reference Counting
+
+
+CPython implements Reference Counting algorithm that consists in having a counter
+in each object that tracks the number of references to it held by other objects.
+In CPython this counter is placed in *PyObject* struct with *ob_refcnt* name.
+
+{% highlight c linenos %}
+    typedef struct _object {
+      _PyObject_HEAD_EXTRA
+      Py_ssize_t ob_refcnt;
+      struct _typeobject *ob_type;
+    } PyObject;
+{% endhighlight %}
+
+
+Knowing how many references an object has, the algorithm is very straightforward.
+Each time than an object creates a reference, *ob_refcnt* gets incremented by 1.
+
+So, for example:
+
+{% highlight python linenos %}
+foo = Foo()
+my_list = []
+{% endhighlight %}
+
+on line 1 `foo` `ob_refcnt` is 1 just because the module has a reference to all the
+objects that live in that module, as well as `my_list` `ob_refct` is 1.
+
+![refcnt1](/images/refcount1)
+
+{% highlight python linenos %}
+foo = Foo()
+my_list = []
+my_list.append(foo)
+{% endhighlight %}
+
+
+Once `foo` is appended to `my_list` `foo` refcnt is equals to 2 because now,
+`foo` has two incoming references one is held by `__main__` module and the other
+one by `my_list`.
+
+![refcnt2](/images/refcount2)
+
+We can observe how this happen under the cover in C.
+
+{% highlight c linenos%}
+static int
+ins1(PyListObject *self, Py_ssize_t where, PyObject *v)
+{
+    .
+    .
+    .
+    items = self->ob_item;
+    for (i = n; --i >= where; )
+        items[i+1] = items[i];
+    Py_INCREF(v);
+    items[where] = v;
+    return 0;
+}
+{% endhighlight %}
+
+This is the a function that given a list, a position and an element it
+places the object `v` in `where` position. Observe line 10, `PY_INCREF(v)`
+that's the place where we keep track of the new reference by `my_list`.
+
+{% highlight c %}
+#define Py_INCREF(op) (                         \
+    _Py_INC_REFTOTAL  _Py_REF_DEBUG_COMMA       \
+    ((PyObject*)(op))->ob_refcnt++)
+{% endhighlight %}
+
+As you can see, `Py_INCREF` macro is a simple counter increment.
+
+Once an object is not used anymore, `list` implementation should do the
+inverse operation and decrement `ob_refcnt` counter by one.
+
+{% highlight python %}
+foo = Foo()
+my_list = []
+my_list.append(foo)
+my_list[0] = None
+{% endhighlight %}
+
+If we change the element in the position of `foo` in `my_list` we end up with
+the same picture as before. Both `foo` and `my_list` `ob_refcnt` have 1 as
+value. We reduced by 1 the counter on `foo` once we changed the value of `my_list[0]`.
+
+![refcnt1](/images/refcount1)
+
+That's because `list` implementation takes care of managing the reference count.
+If we take a look into the C implementation of `SetItem`, we can observe on line
+13 that `Py_XDECREF` is called, that macro what it does is decrements by 1 `ob_refcnt`
+and if this value reaches 0, the object is freed because no one is interested anymore
+in it.
+
+{% highlight c linenos %}
+int
+PyList_SetItem(PyObject *op, Py_ssize_t i,
+               PyObject *newitem)
+{
+    PyObject *olditem;
+    PyObject **p;
+    .
+    .
+    .
+    p = ((PyListObject *)op) -> ob_item + i;
+    olditem = *p;
+    *p = newitem;
+    Py_XDECREF(olditem);
+    return 0;
+}
+{% endhighlight %}
+
+It seems to be pretty straightforward, but if we stop a little and try to think, there is still
+some problems to tackle. What happens if there is a cycle?
+
+{% highlight python %}
+foo = Foo()
+my_list = []
+my_list.append(foo)
+foo.list = my_list
+{% endhighlight %}
+
+In this chunk of code we have a typical example of a cycle.
+
+![cycle1](/images/cycle1)
+
+`foo` has a reference to `my_list` and vice versa. Now, let's imagine that our module `__main__`
+don't hold a reference to those objects.
+
+{% highlight python linenos %}
+del foo
+del my_list
+{% endhighlight %}
+
+![cycle2](/images/cycle2)
+
+Seems like a dead end 😱.
 
 [CPython]: https://www.python.org
 [PyPy]:    https://www.pypy.org
