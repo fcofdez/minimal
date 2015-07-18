@@ -226,6 +226,12 @@ PyList_SetItem(PyObject *op, Py_ssize_t i,
 }
 {% endhighlight %}
 
+{% highlight c linenos %}
+
+{% endhighlight %}
+
+
+
 It seems to be pretty straightforward, but if we stop a little and try to think, there is still
 some problems to tackle. What happens if there is a cycle?
 
@@ -250,7 +256,14 @@ del my_list
 
 ![cycle2](/images/cycle2)
 
-Seems like a dead end 😱.
+Seems like a dead end 😱. Those two objects will never be freed, so we end up having one of those
+memory leaks.
+
+This is one of the trade offs of reference counting, on common cases we get direct deallocation
+without GC pause and it's a easy algorithm. But we need to tackle cycles.
+
+How does python deal with cycles on garbage collection?
+
 
 [CPython]: https://www.python.org
 [PyPy]:    https://www.pypy.org
