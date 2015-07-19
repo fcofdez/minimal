@@ -20,12 +20,12 @@ layers that are below.
 ![businnes](/assets/images/business)
 
 In this blog post we're interested in knowing more about how Python manages the
-life cycle of the memory that are used in our programs. As far as we know in
+memory life cycle that are used in our programs. As far as we know, in
 languages like C/C++, the programmer is the one in charge of dealing with
-memory, allocating with the precise size and later, after using it, freeing that
+memory, allocating with the precise size and after using it, freeing that
 memory. Since it's a manual work, memory leaks, a resource that is not released
 after using it, are a common problem in those languages. There are patterns in
-C++, [RAII], to solve this problems, as well as other techniques like
+C++, like [RAII], to solve this problems, as well as other techniques like
 [uniqueptr](http://en.cppreference.com/w/cpp/memory/unique_ptr) and
 [sharedptr](http://en.cppreference.com/w/cpp/memory/shared_ptr), but still it's
 a common problem.
@@ -35,7 +35,7 @@ a common problem.
 {% highlight c linenos %}
 int * func ( void )
 {
-    int * num = malloc (10 * sizeof ( int ));;
+    int * num = malloc (10 * sizeof ( int ));
     /* ... */
     return num ;
 }
@@ -56,20 +56,22 @@ int * func ( void )
 } // end of function scope, so num is garbage now.
 {% endhighlight %}
 
-On a high level perspective those languages seems to be very difficult to handle, but
-depending on the problem having the full control of memory is imperative, think about
-an embedded systems environment or a very demanding application like a videogame. 
+On a high level perspective those languages seems to be very difficult to
+handle, but depending on the problem, having full control of memory is
+imperative, think about an embedded system environment or a very demanding
+application like a videogame, performance is a must. In those environments being
+able of define the memory layout taking into account caches and so on is key.
 
-We're lucky and Python interpreter does that job for us so we don't have to manage
-memory manually. That's because Python has a garbage collector.
+We're lucky and Python interpreter does that job for us so we don't have to manually manage
+memory. That's because Python has a garbage collector.
 
 # What is Garbage Collection?
 
-The first mention to garbage collection was done in 1960 by John McCarthy, the
+The first mention of garbage collection was done in 1960 by John McCarthy, the
 creator of LISP, in his paper
 [*Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I*](http://www-formal.stanford.edu/jmc/recursive.pdf)
 where he describes the formalism aroud LISP, and as a side note he defines the
-term *We already called this process “garbage collection”, but I guess I
+term. *We already called this process “garbage collection”, but I guess I
 chickened out of using it in the paper—or else the Research Laboratory of
 Electronics grammar ladies wouldn’t let me.*
 Funny, right? academia and industry ended up using *garbage collection* as
@@ -109,13 +111,12 @@ garbage collected language, we can summarize those trade-offs as:
 * Performance impacts.
 * Unpredictability on when the GC is performed (depending on the algorithm).
 
-
 Once we know the basics we can start studying how all this works in Python.
+
 
 # CPython Implementation - Reference Counting
 
-
-CPython implements Reference Counting algorithm that consists in having a counter
+CPython implements Reference Counting algorithm. It consists in having a counter
 in each object that tracks the number of references to it held by other objects.
 In CPython this counter is placed in *PyObject* struct with *ob_refcnt* name.
 
@@ -139,7 +140,7 @@ my_list = []
 {% endhighlight %}
 
 on line 1 `foo` `ob_refcnt` is 1 just because the module has a reference to all the
-objects that live in that module, as well as `my_list` `ob_refct` is 1.
+objects that live in it, as well as `my_list` `ob_refct` is 1.
 
 ![refcnt1](/images/refcount1)
 
@@ -160,22 +161,28 @@ We can observe how this happen under the cover in C.
 
 {% highlight c linenos%}
 static int
-ins1(PyListObject *self, Py_ssize_t where, PyObject *v)
+app1(PyListObject *self, PyObject *v)
 {
-    .
-    .
-    .
-    items = self->ob_item;
-    for (i = n; --i >= where; )
-        items[i+1] = items[i];
+    Py_ssize_t n = PyList_GET_SIZE(self);
+
+    assert (v != NULL);
+    if (n == PY_SSIZE_T_MAX) {
+        PyErr_SetString(PyExc_OverflowError,
+            "cannot add more objects to list");
+        return -1;
+    }
+
+    if (list_resize(self, n+1) == -1)
+        return -1;
+
     Py_INCREF(v);
-    items[where] = v;
+    PyList_SET_ITEM(self, n, v);
     return 0;
 }
 {% endhighlight %}
 
-This is the a function that given a list, a position and an element it
-places the object `v` in `where` position. Observe line 10, `PY_INCREF(v)`
+This is the a function that given a list `self` and an element `v` it
+places the object `v` in the last position. Observe line 16, `PY_INCREF(v)`
 that's the place where we keep track of the new reference by `my_list`.
 
 {% highlight c %}
@@ -204,7 +211,7 @@ value. We reduced by 1 the counter on `foo` once we changed the value of `my_lis
 
 That's because `list` implementation takes care of managing the reference count.
 If we take a look into the C implementation of `SetItem`, we can observe on line
-13 that `Py_XDECREF` is called, that macro what it does is decrements by 1 `ob_refcnt`
+13 that `Py_XDECREF` is called, that macro decrements by 1 `ob_refcnt` on `v`
 and if this value reaches 0, the object is freed because no one is interested anymore
 in it.
 
@@ -226,11 +233,20 @@ PyList_SetItem(PyObject *op, Py_ssize_t i,
 }
 {% endhighlight %}
 
+This is `PY_DECREF` macro implementation, it just decrements the counter
+and if it reaches 0, it deallocates the object.
+
 {% highlight c linenos %}
-
+#define Py_DECREF(op)                                   \
+    do {                                                \
+        PyObject *_py_decref_tmp = (PyObject *)(op);    \
+        if (_Py_DEC_REFTOTAL  _Py_REF_DEBUG_COMMA       \
+        --(_py_decref_tmp)->ob_refcnt != 0)             \
+            _Py_CHECK_REFCNT(_py_decref_tmp)            \
+        else                                            \
+        _Py_Dealloc(_py_decref_tmp);                    \
+    } while (0)
 {% endhighlight %}
-
-
 
 It seems to be pretty straightforward, but if we stop a little and try to think, there is still
 some problems to tackle. What happens if there is a cycle?
@@ -247,7 +263,7 @@ In this chunk of code we have a typical example of a cycle.
 ![cycle1](/images/cycle1)
 
 `foo` has a reference to `my_list` and vice versa. Now, let's imagine that our module `__main__`
-don't hold a reference to those objects.
+don't hold a reference to those objects anymore.
 
 {% highlight python linenos %}
 del foo
@@ -260,10 +276,72 @@ Seems like a dead end 😱. Those two objects will never be freed, so we end up 
 memory leaks.
 
 This is one of the trade offs of reference counting, on common cases we get direct deallocation
-without GC pause and it's a easy algorithm. But we need to tackle cycles.
+without GC pauses and it's a simple algorithm. But we need to tackle cycles.
 
 How does python deal with cycles on garbage collection?
 
+It implements an algorithm to handle cycles. How does it work?
+Every time that we instantiate an object its reference is appended into a global double linked list
+that holds all the references of living objects. There are 3 lists, each list contains objects that
+belongs to one generation, from younger to older objects. Those lists have this shape.
+
+## PyGC_Head
+{% highlight c linenos %}
+typedef union _gc_head {
+    struct {
+        union _gc_head *gc_next;
+        union _gc_head *gc_prev;
+        Py_ssize_t gc_refs;
+    } gc;
+    double dummy;  /* force worst-case alignment */
+} PyGC_Head;
+{% endhighlight %}
+
+Just a double linked list. But this list will be very helpful to deal with
+cycles as we'll see soon.
+As was told before, each time a new object is allocated, garbage collector should be aware
+of this new kid in town, basically it's added to PyGC_Head younger generation.
+
+{% highlight c linenos %}
+PyObject *
+PyTuple_New(Py_ssize_t size)
+{
+    PyTupleObject *op;
+    Py_ssize_t i;
+    if (size < 0) {
+        PyErr_BadInternalCall();
+        return NULL;
+    }
+    if (size < PyTuple_MAXSAVESIZE && (op = free_list[size]) != NULL) {
+        free_list[size] = (PyTupleObject *) op->ob_item[0];
+        numfree[size]--;
+    {
+        /* Check for overflow */
+        if ((size_t)size > ((size_t)PY_SSIZE_T_MAX - sizeof(PyTupleObject) -
+                    sizeof(PyObject *)) / sizeof(PyObject *)) {
+            return PyErr_NoMemory();
+        }
+        op = PyObject_GC_NewVar(PyTupleObject, &PyTuple_Type, size);
+        if (op == NULL)
+            return NULL;
+    }
+    for (i=0; i < size; i++)
+        op->ob_item[i] = NULL;
+        .
+        .
+        .
+    _PyObject_GC_TRACK(op);
+    return (PyObject *) op;
+}
+{% endhighlight %}
+
+Here for example a new list is being allocated, notice the call
+`_PyObject_GC_TRACK(op);` in line number 21, this is how the garbage collector
+tracks the new objects.
+When a cycle detection is fired? Every time that `PyMem_MALLOC(nbytes)` is
+performed the garbage collector
+
+//Replicate collection works in python
 
 [CPython]: https://www.python.org
 [PyPy]:    https://www.pypy.org
