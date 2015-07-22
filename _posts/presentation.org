@@ -1,0 +1,43 @@
+#+TITLE: Knowing your Garbage Collector
+#+AUTHOR: Francisco Fernández Castaño
+#+EMAIL: francisco.fernandez.castano@gmail.com
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:comment d:(not "LOGBOOK") date:t
+#+OPTIONS: e:t email:nil f:t inline:t num:nil p:nil pri:nil stat:t
+#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t
+#+DESCRIPTION:
+#+EXCLUDE_TAGS: noexport
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+
+#+WWW: http://fcofdez.github.io
+#+GITHUB: http://github.com/fcofdez
+#+TWITTER: fcofdezc
+
+
+** Agenda
+
+- Introduction
+  * Motivation
+  * Known problems
+  * Definitions
+  * Garbage collection trade-offs
+- CPython implementation - Reference Counting
+  * Basic objects
+  * Reference Counting algorithm
+  * Cycles detector
+- PyPy approach
+  * Description
+  * Incminmark
+
+* Introduction
+** Hola
+#+BEGIN_SRC c
+int * func ( void )
+{
+   int * num = malloc (10 * sizeof ( int ));;
+   /* ... */
+   return num ;
+}
+#+END_SRC

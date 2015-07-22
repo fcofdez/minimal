@@ -337,11 +337,61 @@ PyTuple_New(Py_ssize_t size)
 
 Here for example a new list is being allocated, notice the call
 `_PyObject_GC_TRACK(op);` in line number 21, this is how the garbage collector
-tracks the new objects.
-When a cycle detection is fired? Every time that `PyMem_MALLOC(nbytes)` is
-performed the garbage collector
+tracks the new objects. When a cycle detection is fired? Every time that
+`_PyObject_GC_Malloc(nbytes):Modules/gcmodule.c:1718` is performed, the garbage
+collector checks if the number of objects in the youngest generation is bigger
+greater than the threshold, if that condition is true a cycle detection starts.
 
-//Replicate collection works in python
+The algorithm is done generation by generation and only if the number of objects
+that live in that generation is greater than the threshold.
+
+The firs step is to update the actual value of `ob_refcnt` from the `PyObject`
+on `PyGC_Head` `gc_refs` variable.
+
+![generations](/images/generations1)
+
+So we end up with this picture, all the objects of the first generation has `gc_refs`
+variable updated.
+
+The next step is iterate over all the objects of the generation and using `tp_traverse`
+function that is implemented by each type and encapsulates how to visit all the referred
+objects that a object has and takes a callback to perform some action.
+Some `tp_traverse` functions will look like:
+
+{% highlight python linenos %}
+class dict(object):
+    def tp_traverse(self, fn):
+        for k, v in self.items():
+            fn(k)
+            fn(v)
+
+class list(object):
+    def tp_traverse(self, fn):
+        for v in self:
+            fn(v)
+{% endhighlight %}
+
+This is to illustrate how it works, but those functions are implemented in C.
+
+And how does the callback look like?
+What it does is decrement by one the number of references only on the objects
+that have a value higher than 0.
+So for example if we have this cycle
+
+![cycle1](/images/cycle2)
+
+`foo` only has a reference to `my_list` so when the algorithm is traversing
+it decrements by one `ob_refcnt` of `my_list`.
+
+So we end up breaking the cycle.
+
+![cycle1](/images/substract-refs1)
+![cycle1](/images/substract-refs2)
+![cycle1](/images/substract-refs3)
+
+![cycle1](/images/generations2)
+![cycle1](/images/final_generations)
+
 
 [CPython]: https://www.python.org
 [PyPy]:    https://www.pypy.org
