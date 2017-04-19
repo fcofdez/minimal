@@ -1,0 +1,19 @@
+* Access path in RDBMS
+** Introduction
+  ACPIR is one of the seminal papers on databases systems. Published in 1979 was
+  the first paper on query plan generation. It was part on the first RDBMS
+  System R, implementing the model propose by Edgar F. Codd in his paper ~A
+  Relational Model of Data for Large Shared Data Banks~ as a response on how to
+  execute queries expressed in a higher level language (SQL).
+
+In this talk we will explore the first implementation of a query planner.
+First we'll explain a little bit about DBs history, as well as what problem
+solved this paper. 
+Later, we'll present the paper following the structure of the different sections in 
+the paper itself.
+And finally we'll see how the field of query planners has evolved over time, since
+the implementation proposed in System R solved some of the problems but took some 
+naive assumptions.
+
+* Background
+IBM IMS was the first database ever implemented. It 

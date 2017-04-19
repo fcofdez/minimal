@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<!-- 2017-03-30 Thu 17:52 -->
+<meta  charset="utf-8" />
+<meta  htto-equiv="X-UA-Compatible" content="chrome=1" />
+<meta  name="generator" content="Org-mode with org-ioslide" />
+<meta  name="author" content="Francisco Fernández Castaño - francisco.fernandez.castano@gmail.com" />
+
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--This one seems to work all the time, but really small on ipad-->
+<!--<meta name="viewport" content="initial-scale=0.4">-->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<link rel="stylesheet" media="all" href="theme/css/default.css" />
+<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css" />
+<link rel="stylesheet" media="all" href="theme/css/small-icon.css" />
+<base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+<script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+
+   <script src="js/jquery-1.7.1.min.js" type="text/javascript"></script>
+
+<script src="js/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML,local/local" type="text/javascript"></script>
+</head>
+<body style="opacity: 0">
+<slides class="layout-widescreen">
+<slide class="title-slide segue nobackground">
+       <aside class="gdbar"><img src="images/pwl.png"></aside>
+       <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+       <hgroup class="auto-fadein">
+         <h1 data-config-title><!-- populated from slide_config.json --></h1>
+         <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+         <p data-config-presenter><!-- populated from slide_config.json --></p>
+       </hgroup>
+    </slide>
+  
+<slide id="sec-" class=" segue dark quote nobackground" style="background-image: url(nil)">
+<aside class="gdbar right bottom"><img src="images/pwl.png"></aside><hgroup class="">
+       <h2 class=" "><div id="outline-container-org228f304" class="outline-2">
+<h2 id="org228f304">Agenda</h2>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="flexbox vleft auto-fadein" id="text-">
+
+
+</article>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgde1833c" class="outline-3">
+<h3 id="orgde1833c">Agenda</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<ul>
+<li>Background</li>
+<li>The paper</li>
+<li>Expanding scope</li>
+</ul>
+
+
+</article>
+
+</slide>
+
+</slide>
+
+</slide>
+<slide id="sec-" class=" segue dark quote nobackground" style="background-image: url(nil)">
+<aside class="gdbar right bottom"><img src="images/pwl.png"></aside><hgroup class="">
+       <h2 class=" "><div id="outline-container-orgd894383" class="outline-2">
+<h2 id="orgd894383">Background</h2>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="flexbox vleft auto-fadein" id="text-">
+
+
+</article>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org63ffd6f" class="outline-3">
+<h3 id="org63ffd6f">Readings in Database Systems</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<ul>
+<li>Peter Bailis</li>
+<li>Joseph M. Hellerstein</li>
+<li>Michael Stonebraker</li>
+</ul>
+<p>
+<a href="http://www.redbook.io/">Red book</a>
+</p>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-" class="fill white nobackground" style="background-image: url(images/apollo.jpg)">
+<hgroup class="">
+       <h2 class="white "><div id="outline-container-orgf8edddc" class="outline-3">
+<h3 id="orgf8edddc">IBM IMS</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org5c21d7f" class="outline-3">
+<h3 id="org5c21d7f">IBM IMS</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/eye-bee-m.jpg" alt="eye-bee-m.jpg" width="400px" />
+</p>
+</div>
+</article>
+<ul>
+<li>Hierarchical data model</li>
+<li>Programmer-defined physical storage format</li>
+<li>Tuple-at-a-time queries</li>
+</ul>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgc93b23c" class="outline-3">
+<h3 id="orgc93b23c">IBM IMS</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/eye-bee-m.jpg" alt="eye-bee-m.jpg" width="400px" />
+</p>
+</div>
+</article>
+<ul>
+<li>Hierarchical data model</li>
+<li><b>Programmer-defined physical storage format</b></li>
+<li><b>Tuple-at-a-time queries</b></li>
+</ul>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org916ca13" class="outline-3">
+<h3 id="org916ca13">IBM IMS</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<div class="org-src-container">
+
+<pre class="prettyprint" data-lang="python">
+def select_appliance():
+  join_records = []
+  for part_tuple in part_segment:
+    for provider_tuple in provider_segment:
+          if part_tuple.provider_id == provider_tuple.id:
+               join_records += (part_tuple, provider_tuple)
+   return join_records
+</pre>
+
+</div>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org2ae457a" class="outline-3">
+<h3 id="org2ae457a">IBM System R</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<blockquote>
+<p>
+System R, an experimental database system,
+was constructed to demonstrate that the usability advantages
+of the relational data model can be realized in a system with
+the complete function and high performance required for
+everyday production use. This paper describes the three
+principal phases of the System R project and discusses some
+of the lessons learned from System R about the design of
+relational systems and database systems in general. 
+</p>
+
+<ul>
+<li>A History and Evaluation of System R</li>
+</ul>
+</blockquote>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org0af03fe" class="outline-3">
+<h3 id="org0af03fe">Terminology</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<p>
+Access Path
+</p>
+<blockquote>
+<p>
+An access path is a way of retrieving tuples from a table and consists of 
+either a file scal or an index plus a <i>matching</i> selection condition.
+</p>
+
+<ul>
+<li>Database Management Systems</li>
+</ul>
+</blockquote>
+
+
+</article>
+
+</slide>
+
+</slide>
+
+</slide>
+<slide id="sec-" class=" segue dark quote nobackground" style="background-image: url(nil)">
+<aside class="gdbar right bottom"><img src="images/pwl.png"></aside><hgroup class="">
+       <h2 class=" "><div id="outline-container-org0d0dfce" class="outline-2">
+<h2 id="org0d0dfce">The Paper</h2>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="flexbox vleft auto-fadein" id="text-">
+
+
+</article>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org2eae088" class="outline-3">
+<h3 id="org2eae088">Abstract</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<blockquote>
+<p>
+In a high level query and data manipulation language such as SQL, requests are
+stated non-procedurally, without reference to access paths. This paper describes
+how System R chooses access paths for both simple (single relation) and complex
+queries (such as joins), given a user specification of desired data as a boolean
+expression of predicates. System R is an experimental database management system
+developed to carry out research on the relational model of data. System R was
+designed and built by members of the IBM San Jose Research Laboratory.
+</p>
+</blockquote>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org39ff08d" class="outline-3">
+<h3 id="org39ff08d">Abstract</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<div class="org-src-container">
+
+<pre class="prettyprint" data-lang="sql">
+SELECT *
+FROM tenk1 t1, tenk2 t2
+WHERE t1.unique1 &lt; 100 AND t1.unique2 = t2.unique2 ORDER BY t1.fivethous;
+</pre>
+
+</div>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org785c0ec" class="outline-3">
+<h3 id="org785c0ec">Abstract</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<div class="org-src-container">
+
+<pre class="prettyprint" data-lang="sql">
+EXPLAIN SELECT t2.name FROM t1 JOIN t2 ON (t1.id = t2.id) WHERE t1.id = 125;
+                        QUERY PLAN
+-----------------------------------------------------------------
+Nested Loop (cost=0.00..178.31 rows=320 width=28)
+    -&gt; Seq Scan on t1 (cost=0.00..152.15 rows=60 width=3)
+        Filter: (id = 125::oid)
+    -&gt; Materialize (cost=0.00..37.02 rows=3 width=34)
+        -&gt; Seq Scan on t2 (cost=0.00..35.08 rows=3 width=34)
+            Filter: (id = 125::oid)
+</pre>
+
+</div>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org238b686" class="outline-3">
+<h3 id="org238b686">Processing of an SQL statement</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/sql.png" alt="sql.png" width="400px" heigth="600px" />
+</p>
+</div>
+</article>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org4918347" class="outline-3">
+<h3 id="org4918347">Processing of an SQL statement</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/sql2.png" alt="sql2.png" width="350px" height="450px" />
+</p>
+</div>
+</article>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org2d4cb0e" class="outline-3">
+<h3 id="org2d4cb0e">The Research Storage System (RSS)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<ul>
+<li>Mantains the physical storage of relations</li>
+<li>Access path to relations</li>
+<li>Locking</li>
+<li>Logging and recovery</li>
+</ul>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org2574289" class="outline-3">
+<h3 id="org2574289">The Research Storage System (RSS)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<ul>
+<li><b>Mantains the physical storage of relations</b></li>
+<li><b>Access path to relations</b></li>
+<li>Locking</li>
+<li>Logging and recovery</li>
+</ul>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org0f7601e" class="outline-3">
+<h3 id="org0f7601e">The Research Storage System (RSS)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<ul>
+<li>Relations are stored as collection of tuples in 4Kb pages</li>
+<li>Pages are organized in segments (logical units)</li>
+</ul>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgf0c02a2" class="outline-3">
+<h3 id="orgf0c02a2">The Research Storage System (RSS)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<ul>
+<li>Access paths:
+<ul>
+<li>Via RSS scan (kind of a for loop)
+<ul>
+<li>All pages from non empty segments are touched</li>
+</ul></li>
+<li>Via Index scan (B-Trees with (key, id of tuples) in the leaves)
+<ul>
+<li>All index pages are touched + relation pages</li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org2a700ff" class="outline-3">
+<h3 id="org2a700ff">Costs for single relation access paths</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<blockquote>
+<p>
+For single relations, the cheapest access path is obtained by evaluating the
+cost for each available access path (each index on the relation, plus a segment
+scan). [&#x2026;] For each such access path, a predicted cost is computed along with
+the ordering of the tuples it will produce. [&#x2026;] and the cheapest access path
+is the one chosen.
+</p>
+</blockquote>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org4845c9b" class="outline-3">
+<h3 id="org4845c9b">Costs for single relation access paths</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<p>
+\[COST = PAGE\_FETCHES + W (RSI\_CALLS)\]
+</p>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org7fea50c" class="outline-3">
+<h3 id="org7fea50c">Costs for single relation access paths</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<p>
+Statistics collected by System R for each relation T:
+</p>
+<ul>
+<li>NCARD(T)</li>
+<li>TCARD(T)</li>
+<li>P(T)</li>
+</ul>
+<p>
+Statistics collected for each index I on relation T:
+</p>
+<ul>
+<li>ICARD(I)</li>
+<li>NINDX(I)</li>
+</ul>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org026d714" class="outline-3">
+<h3 id="org026d714">Costs for single relation access paths</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<div class="org-src-container">
+
+<pre class="prettyprint" data-lang="sql">
+SELECT *
+FROM tenk1 t1
+WHERE t1.unique1 &lt; 100;
+</pre>
+
+</div>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org0ab90be" class="outline-3">
+<h3 id="org0ab90be">Costs for single relation access paths</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Operation</th>
+<th scope="col" class="left">Selectivity Factor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left"><code>colum = value</code></td>
+<td class="left"><code>F = 1 / ICARD(column_index) or 1/10</code></td>
+</tr>
+
+<tr>
+<td class="left"><code>column1 = column2</code></td>
+<td class="left"><code>F = 1/MAX(ICARD(column1 index), ICARD(column2 index))</code> or <code>F = 1/ICARD(column-i index)</code>  or <code>F = 1/10</code></td>
+</tr>
+
+<tr>
+<td class="left"><code>column &gt; value</code></td>
+<td class="left"><code>F = (high key value - value) / (high key value - low key value)</code> or <code>1/3</code></td>
+</tr>
+
+<tr>
+<td class="left"><code>column BETWEEN value1 AND value2</code></td>
+<td class="left"><code>F = (value2 - value1) / (high key value - low key value)</code> or <code>1/4</code></td>
+</tr>
+
+<tr>
+<td class="left"><code>column IN (list of values)</code></td>
+<td class="left"><code>F = (number of items in list) * (selectivity factor for column = value)</code></td>
+</tr>
+</tbody>
+</table>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgeb20bb7" class="outline-3">
+<h3 id="orgeb20bb7">Costs for single relation access paths</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Operation</th>
+<th scope="col" class="left">Selectivity Factor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left"><code>columnA IN subquery</code></td>
+<td class="left"><code>F = (expected cardinality of the subquery result) / (product of the cardinalities of all the relations in the subquery’s FROM-list).</code></td>
+</tr>
+
+<tr>
+<td class="left"><code>(pred1) OR (pred2)</code></td>
+<td class="left"><code>F = F(pred1) + F(pred2) - F(pred1) * F(pred2)</code></td>
+</tr>
+
+<tr>
+<td class="left"><code>(pred1) AND (pred2)</code></td>
+<td class="left"><code>F = F(pred1) * F(pred2)</code></td>
+</tr>
+
+<tr>
+<td class="left"><code>NOT pred</code></td>
+<td class="left"><code>F = 1 - F(pred)</code></td>
+</tr>
+</tbody>
+</table>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgf5ca05d" class="outline-3">
+<h3 id="orgf5ca05d">Costs for single relation access paths</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+<p>
+\[QCARD = \sum_{i=0}^{i=bool\_factor}F(c_i) * NCARD(T)\]
+</p>
+</article>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org654ada8" class="outline-3">
+<h3 id="org654ada8">Costs for single relation access paths (Heuristics table)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Situation</th>
+<th scope="col" class="left">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">Unique index matching an equal predicate</td>
+<td class="left"><code>1+1+W</code></td>
+</tr>
+
+<tr>
+<td class="left">Clustered index I matching one or more boolean factors</td>
+<td class="left"><code>F(preds) * (NINDX(I) + TCARD) + W * RSICARD</code></td>
+</tr>
+
+<tr>
+<td class="left">Non-clustered index I matching one or more boolean factors</td>
+<td class="left"><code>F(preds) * (NINDX(I) + NCARD) + W * RSICARD</code></td>
+</tr>
+
+<tr>
+<td class="left">Clustered index I not matching any boolean factors</td>
+<td class="left"><code>(NINDX(I) + TCARD) + W * RSICARD</code></td>
+</tr>
+
+<tr>
+<td class="left">Non-clustered index I not matching any boolean factors</td>
+<td class="left"><code>(NINDX(I) + NCARD) + W * RSICARD</code></td>
+</tr>
+
+<tr>
+<td class="left">Segment scan</td>
+<td class="left"><code>TCARD/P + W * RSICARD</code></td>
+</tr>
+</tbody>
+</table>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-" class=" segue dark quote nobackground" style="background-image: url(nil)">
+<aside class="gdbar right bottom"><img src="images/pwl.png"></aside><hgroup class="">
+       <h2 class=" "><div id="outline-container-org0d92dd5" class="outline-3">
+<h3 id="org0d92dd5">Access path selection for joins</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="flexbox vleft auto-fadein" id="text-">
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org92dc0b9" class="outline-3">
+<h3 id="org92dc0b9">Access path selection for joins</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<ul>
+<li>Nested loops Join</li>
+</ul>
+<div class="org-src-container">
+
+<pre class="prettyprint" data-lang="python">
+def nested_loop_join(left_relation, right_relation):
+  join_records = []
+  for left_tuple in left_relation:
+    for right_tuple in right_relation:
+          if left_tuple.key == right_tuple.key:
+               join_records += (left_tuple, right_tuple)
+   return join_records
+</pre>
+
+</div>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orge0952f0" class="outline-3">
+<h3 id="orge0952f0">Access path selection for joins (Merging scans join)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<div class="org-src-container">
+
+<pre class="prettyprint" data-lang="python">
+def merge_join(left_relation, right_relation):
+  join_records = []
+  sorted_left = sorted(left_relation)
+  sorted_right = sorted(right_relation)
+
+  while !sorted_left.isEmpty() &amp;&amp; !sorted_right.isEmpty():
+    left = sorted_left.head
+    right = sorted_right.head
+    if (left.key == right.key:
+       join_records += (left, right)
+       sorted_left.next()
+       sorted_right.next()
+    elif left.key &lt; right.key:
+       sorted_left.next()
+    else:
+       sorted_right.next()
+
+  return join_records
+</pre>
+
+</div>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org244254a" class="outline-3">
+<h3 id="org244254a">Access path selection for joins</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<blockquote>
+<p>
+We now consider the order in which the relations are chosen to be joined. It
+should be noted that although the cardinality of the join of n relations is the
+same regardless of join order, the cost of joining in different orders can be
+substantially different. If a query block has n relations in its FROM list, then
+there are n factorial permutations of relation join orders.
+</p>
+</blockquote>
+
+
+</article>
+
+</slide>
+
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org978c142" class="outline-3">
+<h3 id="org978c142">Access path selection for joins</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<p>
+To avoid explore \[n!\] join orderings some heuristics are applied to prune the search space.
+</p>
+<ul>
+<li>Cartesian products are expensive, so they are performed as late as possible.</li>
+</ul>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org9b6bdf2" class="outline-3">
+<h3 id="org9b6bdf2">Access path selection for joins</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<blockquote>
+<p>
+To find the optimal plan for joining n relations, a tree of possible solutions
+is constructed. [&#x2026;]
+The search tree is constructed by iteration on the number of relations joined so
+far. First, the best way is found to access each single relation for each
+interesting tuple ordering and for the unordered case. Next, the best way of
+joining any relation to these is found, subject to the heuristics for join
+order. [&#x2026;]
+After the complete solutions (all of the relations joined together) have been
+found, the optimizer chooses the cheapest solution which gives the required
+order, if any was specified.
+</p>
+</blockquote>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgdb7fd0e" class="outline-3">
+<h3 id="orgdb7fd0e">Access path selection for joins (Example)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<div class="org-src-container">
+
+<pre class="prettyprint" data-lang="sql">
+SELECT NAME,TITLE,SAL,DNAME
+FROM EMP,DEPT,JOB
+WHERE TITLE=‘CLERK’
+AND LOC=‘DENVER’
+AND EMP.DNO=DEPT.DNO
+AND EMP.JOB=JOB.JOB
+</pre>
+
+</div>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org75cdb23" class="outline-3">
+<h3 id="org75cdb23">Access path selection for joins (Example)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/join2.png" alt="join2.png" width="400px" />
+</p>
+</div>
+</article>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgd9c6587" class="outline-3">
+<h3 id="orgd9c6587">Access path selection for joins (Example)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/join3.png" alt="join3.png" width="400px" />
+</p>
+</div>
+</article>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org552e94f" class="outline-3">
+<h3 id="org552e94f">Access path selection for joins (Example)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/join4.png" alt="join4.png" width="400px" />
+</p>
+</div>
+</article>
+
+
+</article>
+
+</slide>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-org342a82d" class="outline-3">
+<h3 id="org342a82d">Access path selection for joins (Example)</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="" id="text-">
+<article class="flexbox vcenter">
+
+<div class="figure">
+<p><img src="./images/join5.png" alt="join5.png" width="400px" />
+</p>
+</div>
+</article>
+
+
+</article>
+
+</slide>
+
+</slide>
+
+</slide>
+<slide id="sec-" class=" segue dark quote nobackground" style="background-image: url(nil)">
+<aside class="gdbar right bottom"><img src="images/pwl.png"></aside><hgroup class="">
+       <h2 class=" "><div id="outline-container-org429cd7d" class="outline-2">
+<h2 id="org429cd7d">Expanding scope</h2>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+<article class="flexbox vleft auto-fadein" id="text-">
+
+
+</article>
+</slide>
+<slide id="sec-"  >
+<hgroup class="">
+       <h2 class=" "><div id="outline-container-orgfb04e3b" class="outline-3">
+<h3 id="orgfb04e3b">Expanding scope</h3>
+</div>
+</h2>
+       <h3></h3>
+       </hgroup>
+
+</slide>
+
+</slide>
+
+</slide>
+<slide id="sec-" class=" thank-you-slide segue nobackground" style="background-image: url(nil)">
+<aside class="gdbar right"><img src="images/pwl.png"></aside><article class="flexbox vleft auto-fadein" id="text-">
+<h2>
+  <p>Thank You ˊ・ω・ˋ</p>
+</h2>
+<br>
+<p class="auto-fadein" data-config-contact>
+</p>
+</article>
+
+</slide>
+<slide class="backdrop"></slide>
+</slides> 
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body> 
+
+</html>
