@@ -5,7 +5,7 @@ function fn() {
         input = document.getElementById("input");
 
     button.addEventListener("click", function(){
-        if (input.value == "45") {
+        if (input.value == "54") {
             image.style.display = "block";
             pista.style.display = "block";
         } else {
